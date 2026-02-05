@@ -13,3 +13,4 @@ C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolve
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.BusinessLogic\obj\Debug\net8.0\refint\AnagramSolver.BusinessLogic.dll
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.BusinessLogic\obj\Debug\net8.0\AnagramSolver.BusinessLogic.pdb
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.BusinessLogic\obj\Debug\net8.0\ref\AnagramSolver.BusinessLogic.dll
+C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.BusinessLogic\obj\Debug\net8.0\AnagramSolver.BusinessLogic.sourcelink.json

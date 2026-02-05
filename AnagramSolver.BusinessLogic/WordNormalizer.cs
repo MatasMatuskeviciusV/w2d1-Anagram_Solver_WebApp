@@ -10,6 +10,10 @@ namespace AnagramSolver.BusinessLogic
     {
         public string NormalizeUserWords(string rawWord)
         {
+            if (string.IsNullOrEmpty(rawWord))
+            {
+                return "";
+            }
             var words = rawWord.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
             foreach(var word in words)
@@ -20,14 +24,23 @@ namespace AnagramSolver.BusinessLogic
             return sb.ToString();
         }
 
-        public HashSet<string> NormalizeFileWords(IEnumerable<string> rawWords)
+        public HashSet<string> NormalizeFileWords(IEnumerable<string>? rawWords)
         {
             var distinctWords = new HashSet<string>();
 
-            foreach(var word in rawWords)
+            if(rawWords == null)
+            {
+                return distinctWords;
+            }
+
+            foreach (var word in rawWords)
             {
                 var normalized = word.Trim().ToLower();
-                distinctWords.Add(normalized);
+
+                if (!string.IsNullOrEmpty(normalized))
+                {
+                    distinctWords.Add(normalized);
+                }
             }
 
             return distinctWords;

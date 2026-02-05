@@ -32,3 +32,4 @@ C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolve
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.Cli\obj\Debug\net8.0\AnagramSolver.Cli.genruntimeconfig.cache
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.Cli\obj\Debug\net8.0\ref\AnagramSolver.Cli.dll
 C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.Cli\bin\Debug\net8.0\Data\zodynas.txt
+C:\Users\matas.matuskevicius\source\repos\Anagram_2.3\AnagramSolver\AnagramSolver.Cli\obj\Debug\net8.0\AnagramSolver.Cli.sourcelink.json

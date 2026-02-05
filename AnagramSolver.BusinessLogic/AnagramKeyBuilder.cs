@@ -10,6 +10,10 @@ namespace AnagramSolver.BusinessLogic
     {
         public static string BuildKey(string letters)
         {
+            if (string.IsNullOrEmpty(letters))
+            {
+                return "";
+            }
             var arr = letters.ToCharArray();
             Array.Sort(arr);
             return new string(arr);
