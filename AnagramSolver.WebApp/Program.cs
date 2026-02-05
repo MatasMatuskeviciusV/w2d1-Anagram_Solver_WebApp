@@ -1,0 +1,59 @@
+using AnagramSolver.BusinessLogic;
+using AnagramSolver.Contracts;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IWordRepository>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+
+    var relative = cfg["Dictionary:WordFilePath"];
+    var fullPath = Path.Combine(env.ContentRootPath, relative);
+
+    return new FileWordRepository(fullPath);
+});
+
+builder.Services.AddScoped<IAnagramSolver>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var repo = sp.GetRequiredService<IWordRepository>();
+
+    int maxResults = int.Parse(cfg["Settings:MaxResults"]);
+    int maxWords = int.Parse(cfg["Settings:MaxWordsInAnagram"]);
+
+    return new DefaultAnagramSolver(repo, maxResults, maxWords);
+});
+
+builder.Services.AddScoped<UserProcessor>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    int minLen = int.Parse(cfg["Settings:MinUserWordLength"]);
+    return new UserProcessor(minLen);
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();

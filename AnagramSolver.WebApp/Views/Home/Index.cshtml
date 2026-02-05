@@ -1,0 +1,29 @@
+﻿@model AnagramSolver.WebApp.Models.AnagramViewModel
+
+<h2>Anagramų paieška</h2>
+
+<form asp-action="Index" method="get">
+    <input type="text" name="id" placeholder="Įveskite žodį" />
+    <button type="submit">Ieškoti</button>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <p style="color:red">@Model.Error</p>
+}
+else if (Model.Results.Count > 0)
+{
+    <h3>Anagramos:</h3>
+    <ul>
+        @foreach(var w in Model.Results)
+        {
+            <li>@w</li>
+        }
+    </ul>
+}
+
+else if (!string.IsNullOrWhiteSpace(Model.Query))
+{
+    <p>Anagramų nerasta</p>
+}
+
