@@ -4,11 +4,15 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using AnagramSolver.BusinessLogic;
 using AnagramSolver.Contracts;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace AnagramSolver.Cli
 {
     internal class Program
     {
+        private static readonly HttpClient _client = new HttpClient();
         static async Task Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
@@ -17,20 +21,24 @@ namespace AnagramSolver.Cli
             var config = new ConfigurationBuilder().SetBasePath(AppContext.BaseDirectory).AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).Build();
 
             int minUserLen = int.Parse(config["Settings:MinUserWordLength"]);
-            int maxResults = int.Parse(config["Settings:MaxResults"]);
-            int maxWords = int.Parse(config["Settings:MaxWordsInAnagram"]);
-            string path = config["Dictionary:WordFilePath"];
+            var apiBaseUrl = config["Api:BaseUrl"];
 
-            var normalizer = new WordNormalizer();
-
-            IWordRepository repo = new FileWordRepository(path);
-
-            IAnagramSolver solver = new DefaultAnagramSolver(repo, maxResults, maxWords);
+            if (string.IsNullOrWhiteSpace(apiBaseUrl))
+            {
+                Console.WriteLine("Konfigūracijoje nenurodytas Base Url.");
+                return;
+            }
 
             var user = new UserProcessor(minUserLen);
 
             Console.WriteLine("Įveskite žodžius: ");
-            string input = Console.ReadLine();
+            string? input = Console.ReadLine();
+
+            if(string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Nieko neįvesta");
+                return;
+            }
 
             if (!user.IsValid(input))
             {
@@ -38,10 +46,13 @@ namespace AnagramSolver.Cli
                 return;
             }
 
-            var combined = normalizer.NormalizeUserWords(input);
-            var sortedKey = AnagramKeyBuilder.BuildKey(combined);
+            _client.BaseAddress = new Uri(apiBaseUrl);
 
-            var results = await solver.GetAnagramsAsync(sortedKey);
+            var response = await _client.GetAsync($"/api/anagrams/{Uri.EscapeDataString(input)}");
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var results = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
 
             if(results.Count == 0)
             {
